@@ -10,6 +10,16 @@ progress: Got it . waiting for it
 
 start_cooking: sounds interesting. I am ready to make {{food}} with you 
 
-status_cooking: yeah, we are tired making {{food}}
+end_cooking: cheers for the good work. we have finished making {{food}}. waiting to serve you again later
 
-history_cooking: this skill development is under process
+end_cooking_error: Master, we haven't started cooking
+
+very_recent_cooking_status: cheers !! we are cooking {{item}} for the last {{minutes}} minutes and {{seconds}} seconds
+
+recent_cooking_status: cheers !! we are cooking {{item}} for the last {{hours}} hour {{minutes}} minutes and {{seconds}} seconds
+
+success: your id is {{token}}
+
+failure: I was unable to find your email
+
+status_cooking: yeah, we are tired making {{food}}
