@@ -23,3 +23,7 @@ success: your id is {{token}}
 failure: I was unable to find your email
 
 status_cooking: yeah, we are tired making {{food}}
+
+history_cooking: Recently we made, {{dishes}}
+
+empty_history_cooking: We haven't made any dishes master
