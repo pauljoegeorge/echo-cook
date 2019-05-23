@@ -32,22 +32,17 @@ def start_cooking(item):
   cook_msg = render_template('start_cooking', food = item)
   return statement(cook_msg)
 
-# @ask.intent("YesIntent")
-# def positive_response():
-#   jokes = [
-# 	" Never trust math teachers who use graph paper. They are always plotting something.",
-# 	" What do you get when you cross a snake with a tasty dessert? A pie-thon!",
-# 	"Why is Peter Pan flying all the time? He Neverlands!"
-# 	]
-#   joke = random.choice(jokes)
-#   joke_template = render_template('fun', joke=joke)
-#   return statement(joke_template)
+# add cooking status here
+@ask.intent("cookStatusIntent", convert={'dish': str})
+def status_cooking(dish):
+  cook_msg = render_template('status_cooking', food = dish)
+  return statement(cook_msg)
 
-# @ask.intent("NoIntent")
-# def negative_response():
-#     response= render_template('no_response')
-#     return statement(response)
-
+# check cooking history
+@ask.intent("historyIntent")
+def cooking_history():
+  cook_msg = render_template('history_cooking')
+  return statement(cook_msg)
 
 if __name__ == '__main__':
     app.run(debug=True)

@@ -9,3 +9,7 @@ no_response: waiting to server you again later.
 progress: Got it . waiting for it
 
 start_cooking: sounds interesting. I am ready to make {{food}} with you 
+
+status_cooking: yeah, we are tired making {{food}}
+
+history_cooking: this skill development is under process
