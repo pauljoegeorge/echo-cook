@@ -24,6 +24,6 @@ failure: I was unable to find your email
 
 status_cooking: yeah, we are tired making {{food}}
 
-history_cooking: Recently we made, {{dishes}}
+history_cooking: Recently we made {{total}} items, {{dishes}}. I am waiting to make more with you. 
 
 empty_history_cooking: We haven't made any dishes master

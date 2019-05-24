@@ -53,58 +53,57 @@ def start_cooking(itemone):
   cook_msg = render_template('start_cooking', food = itemone)
   return statement(cook_msg)
 
-# @ask.intent("cookStatusIntent", convert={'dish': str})
-# def status_cooking(dish):
-# 	if dish != None:
-# 	  	# cook_msg = render_template('status_cooking', food = dish)
-# 	  	# return statement(cook_msg)
-# 	  	userId = context.System.user.userId
-#         now = datetime.now()
-#         current_time = now.strftime("%d/%m/%Y %H:%M:%S")
-#         db = dynamodb.Table('echoCook')
-#         response = db.scan(
-#             FilterExpression=Attr('userId').eq(userId) and Attr('food_item').eq(dish) and Attr('end_dt').eq('None')
-# 	  	)
-#         items = response['Items']
-#         start_dt = ''
-#         hours = ''
-#         minutes = ''
-#         seconds = ''
-# 	   	for item in response['Items']:
-# 	   		if str(item['food_item']) == dish: 
-# 	   			start_dt = item['start_dt']
-# 	   	time_taken = ''
-# 	   	if start_dt != '':
-# 	   		print("start date ....................."+  str(datetime.strptime(current_time, "%d/%m/%Y %H:%M:%S")))
-# 	   		print("end date ....................." + str(datetime.strptime(start_dt, "%d/%m/%Y %H:%M:%S")))
-# 	   		total_time = datetime.strptime(current_time, "%d/%m/%Y %H:%M:%S") - datetime.strptime(start_dt, "%d/%m/%Y %H:%M:%S")
-# 	   		time_taken = divmod(total_time.days * 86400 + total_time.seconds, 60)
-# 	   	else:
-# 	   		msg = render_template('failure')
-# 	   		return statement(msg)
-# 	   	if len(time_taken) == 3:
-# 	   		hours = time_taken[0]
-# 	   		minutes = time_taken[1]
-# 	   		seconds = time_taken[2]
-# 	   		print('printing  date.....', str(hours), str(minutes), str(seconds))
-# 	   	else:
-# 	   		if(time_taken[0] > 59):
-# 	   			hours = round(time_taken[0]/60)
-# 	   			minutes = time_taken[0] - (hours * 60)
-# 	   			seconds = time_taken[1]
-# 	   		else:
-# 	   			minutes = time_taken[0]
-# 	   			seconds = time_taken[1]
-# 	   		print('printing  date.....', str(hours), str(minutes), str(seconds))
-# 	   	status_msg = ''
-# 	   	if hours != '':
-# 	   		status_msg = render_template('recent_cooking_status', item  = dish,  hours = int(hours), minutes = int(minutes), seconds = int(seconds))
-# 	   	else:
-# 	   		status_msg = render_template('very_recent_cooking_status', item = dish, minutes = int(minutes), seconds = int(seconds))
-# 	   	return statement(status_msg)
-# 	else:
-# 		msg = render_template('failure')
-#     	return statement(msg)
+@ask.intent("cookStatusIntent", convert={'dish': str})
+def status_cooking(dish):
+  if dish != None:
+	  # cook_msg = render_template('status_cooking', food = dish)
+	  # return statement(cook_msg)
+    userId = context.System.user.userId
+    now = datetime.now()
+    current_time = now.strftime("%d/%m/%Y %H:%M:%S")
+    db = dynamodb.Table('echoCook')
+    response = db.scan(
+            FilterExpression=Attr('userId').eq(userId) and Attr('food_item').eq(dish) and Attr('end_dt').eq('None')
+	  )
+    items = response['Items']
+    start_dt = ''
+    hours = ''
+    minutes = ''
+    seconds = ''
+    for item in response['Items']:
+      if str(item['food_item']) == dish:
+        start_dt = item['start_dt']
+    time_taken = ''
+    if start_dt != '':
+      print("start date ....................."+  str(datetime.strptime(current_time, "%d/%m/%Y %H:%M:%S")))
+      print("end date ....................." + str(datetime.strptime(start_dt, "%d/%m/%Y %H:%M:%S")))
+      total_time = datetime.strptime(current_time, "%d/%m/%Y %H:%M:%S") - datetime.strptime(start_dt, "%d/%m/%Y %H:%M:%S")
+      time_taken = divmod(total_time.days * 86400 + total_time.seconds, 60)
+    else:
+      msg = render_template('failure')
+      return statement(msg)
+    if len(time_taken) == 3:
+      hours = time_taken[0]
+      minutes = time_taken[1]
+      seconds = time_taken[2]
+      print('printing  date.....', str(hours), str(minutes), str(seconds))
+    else:
+      if(time_taken[0] > 59):
+        hours = round(time_taken[0]/60)
+        minutes = time_taken[0] - (hours * 60)
+        seconds = time_taken[1]
+      else:
+        minutes = time_taken[0]
+        seconds = time_taken[1]
+    status_msg = ''
+    if hours != '':
+      status_msg = render_template('recent_cooking_status', item  = dish,  hours = int(hours), minutes = int(minutes), seconds = int(seconds))
+    else:
+      status_msg = render_template('very_recent_cooking_status', item = dish, minutes = int(minutes), seconds = int(seconds))
+    return statement(status_msg)
+  else:
+    msg = render_template('failure')
+    return statement(msg)
 
 
 @ask.intent("finishCookingIntent", convert={'food': str})
@@ -178,7 +177,7 @@ def get_permission():
 @ask.intent("historyIntent")
 def cooking_history():
 	userId = context.System.user.userId
-	current_time = now.strftime("%d/%m/%Y %H:%M:%S")
+	#current_time = now.strftime("%d/%m/%Y %H:%M:%S")
 	db = dynamodb.Table('echoCook')
 	response = db.scan(
 	     FilterExpression=Attr('userId').eq(userId)
@@ -187,10 +186,10 @@ def cooking_history():
 	dishes_array = []
 	dishes = ''
 	for item in items:
-		dishes_array.append(items['food_item'])
+		dishes_array.append(item['food_item'])
 	if dishes_array != []:
 		dishes = ",".join(dishes_array)
-		cook_msg = render_template('history_cooking', dishes = dishes)
+		cook_msg = render_template('history_cooking', dishes = dishes, total = len(dishes_array))
 	else: 		
 		cook_msg = render_template('empty_history_cooking')
 	return statement(cook_msg)
